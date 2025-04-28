@@ -18,7 +18,16 @@ authRouter.post('/staff/login', async(req, res)=>{
         res.status(401).json({status:'Failed', message:err.message});
     }
 });
-
+//staff logout
+authRouter.post('/staff/logout', async(req, res)=>{
+    try{
+        res.cookie('token', null, {expires:new Date(Date.now())});
+        res.status(200).json({status:'Ok', message:'Logged out successfully.'});
+    }
+    catch(err){
+        res.status(401).json({status:'Failed', message:err.message});
+    }
+});
 //staff signup
 authRouter.post('/staff/signup', async(req, res)=>{
     try{        
