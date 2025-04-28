@@ -1,0 +1,31 @@
+{
+  "name": "ultra-look-mens-salon",
+  "version": "1.0.0",
+  "description": "Back-end implementation for ultra-look-mens-salon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivakumarKirigeri641/ultra-look-mens-salon.git"
+  },
+  "author": "Shivakumar, Amruta, Suhas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivakumarKirigeri641/ultra-look-mens-salon/issues"
+  },
+  "homepage": "https://github.com/shivakumarKirigeri641/ultra-look-mens-salon#readme",
+  "dependencies": {
+    "argon2": "^0.43.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.0",
+    "nodemon": "^3.1.10",
+    "validator": "^13.15.0"
+  }
+}
