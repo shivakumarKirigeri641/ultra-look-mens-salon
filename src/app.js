@@ -5,6 +5,7 @@ const connectDB = require('./database/connectDB');
 const app = new express();
 const ServicesList=require('./models/servicesList');
 const authRouter = require('./routers/authRouter');
+const servicesRouter = require('./routers/servicesRouter');
 
 
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(cors({
     credentials: true
 }));
 app.use('/', authRouter);
+app.use('/', servicesRouter);
 connectDB().then(()=>{
     console.log('Database connected successfully.');
     app.listen(7777, ()=>{
