@@ -25,6 +25,12 @@ const getpriceAndCountWithDate=(masterdata, serviceList)=>{
             }
         });
     });
+
+    //store if count>0
+    newlist.forEach(x => {
+        x.prices = x.prices.filter(y=>y.count>0);
+        arrayOfPriceAndCountWithDate.push(x);
+    });
     return newlist;
 };
 module.exports = getpriceAndCountWithDate;

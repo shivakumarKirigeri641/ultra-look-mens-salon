@@ -12,14 +12,8 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
         //validate month and year here.
         const serviceList = await ServciesList.find({});
         const start = new Date();
-        start.setMonth(0);
-        start.setFullYear(2025);
-        start.setDate(14);
         start.setHours(0,0,0,0);
-        const end = new Date();
-        end.setMonth(0);
-        end.setDate(14);
-        end.setFullYear(2025);
+        const end=new Date();
         end.setHours(23,59,59,0);
         
         const result = await JobList.find({
