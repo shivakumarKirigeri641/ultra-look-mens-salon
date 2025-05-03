@@ -1,33 +1,41 @@
 const express = require('express');
-const getCountOfServices = require("../utils/getCountOfServices");
 const summaryRouter = express.Router();
 const checkAuthentication = require('../middleware/checkAuthentication');
 const validateDate= require('../utils/validateDate');
-const filterServiceDataByDate = require('../utils/filterServiceDataByDate');
-const ServicesList = require('../models/servicesList');
+const ServciesList = require('../models/servicesList');
+const getpriceAndCountWithDate = require('../utils/getpriceAndCountWithDate');
 const JobList = require("../models/jobList");
 const { default: mongoose } = require('mongoose');
 //get summary of jobs for current day
 summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
     try{
-     const staffdata = await JobList.findOne({staffId:req.userdata._id}).populate('staffId', 'firstName lastName').populate('serviceData.serviceIDs.serviceid', 'serviceName');    
-     const today = new Date();
-     const todayDay = today.getUTCDate();
-     const todayMonth = today.getUTCMonth();
-     const todayYear = today.getUTCFullYear();
-     console.log(todayDay, todayMonth, todayYear);
-     const filter = filterServiceDataByDate(staffdata, todayDay, todayMonth, todayYear);
-
-     const servicelist = await ServicesList.find({});
-     const serviceListWithCount0 = servicelist.map(x=>({_id:x._id, serviceName:x.serviceName, price:x.prices[x.prices.length-1].price, count:0}));     
-     const listidfromsummary = filter.map(x=>(x.serviceIDs.map(y=>y.serviceid._id)));     
-     const summaryListWithCount = getCountOfServices(serviceListWithCount0, listidfromsummary);
-     
-     res.status(200).json({status:'Ok', message:'Staff joblist fetched successfully.', data:summaryListWithCount});    
-    } 
-    catch(err){
-     res.status(401).json({status:'Failed', message:err.message});
- }
+        //validate month and year here.
+        const serviceList = await ServciesList.find({});
+        const start = new Date();
+        start.setMonth(0);
+        start.setFullYear(2025);
+        start.setDate(14);
+        start.setHours(0,0,0,0);
+        const end = new Date();
+        end.setMonth(0);
+        end.setDate(14);
+        end.setFullYear(2025);
+        end.setHours(23,59,59,0);
+        
+        const result = await JobList.find({
+            $and:[
+            {staffId:req.userdata._id},
+            {timeOfServiceIDs: {
+                $gte: start,
+                $lt: end
+              }
+            }]});
+            const summaryData = getpriceAndCountWithDate(result, serviceList);
+            res.status(200).json({status:'Ok', data:summaryData});
+       } 
+       catch(err){
+        res.status(401).json({status:'Failed', message:err.message});
+    }
  });
  
  //get summary of jobs for spcefic date
@@ -49,13 +57,16 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
       end.setFullYear(year);
       end.setHours(23,59,59,0);
       
-      const result = await JobList.find({
-          timeOfServiceIDs: {
-              $gte: start,
-              $lt: end
-            }
-          }).populate('serviceData', 'serviceName');
-      res.send(result)
+      const serviceList = await ServciesList.find({});
+      const result = await JobList.find({$and:[
+        {staffId:req.userdata._id},
+        {timeOfServiceIDs: {
+            $gte: start,
+            $lt: end
+          }
+        }]});
+        const summaryData = getpriceAndCountWithDate(result, serviceList);
+        res.status(200).json({status:'Ok', data:summaryData});
      } 
      catch(err){
       res.status(401).json({status:'Failed', message:err.message});
@@ -85,14 +96,16 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
         end.setDate(1);
         end.setFullYear(year);
         end.setHours(0,0,0,0);
-        //console.log(start, end);
-        const result = await JobList.find({
-            timeOfServiceIDs: {
+        const serviceList = await ServciesList.find({});
+        const result = await JobList.find({$and:[
+            {staffId:req.userdata._id},
+            {timeOfServiceIDs: {
                 $gte: start,
                 $lt: end
               }
-            }).populate('serviceData', 'serviceName');
-        res.send(result)
+            }]});
+            const summaryData = getpriceAndCountWithDate(result, serviceList);
+        res.status(200).json({status:'Ok', data:summaryData});
     } 
     catch(err){
      res.status(401).json({status:'Failed', message:err.message});
@@ -118,19 +131,33 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
         end.setDate(1);
         end.setFullYear(year);
         end.setHours(0,0,0,0);
-        //console.log(start, end);
-        const result = await JobList.find({
-            timeOfServiceIDs: {
+        const serviceList = await ServciesList.find({});
+        const result = await JobList.find({$and:[
+            {staffId:req.userdata._id},
+            {timeOfServiceIDs: {
                 $gte: start,
                 $lt: end
               }
-            }).populate('serviceData', 'serviceName');
-        res.send(result)
+            }]});
+            const summaryData = getpriceAndCountWithDate(result, serviceList);
+        res.status(200).json({status:'Ok', data:summaryData});
     } 
     catch(err){
      res.status(401).json({status:'Failed', message:err.message});
  }
  });
+
+ //temp
+ summaryRouter.post('/staff/updatedate', async(req,res)=>{
+    const serviceList = await ServciesList.find({});
+    //680f7ac33a888bbb8878d98e
+    serviceList.forEach(async element => {
+        const result = await ServciesList.findById(element._id);    
+        result.prices[result.prices.length-1].toDate = new Date();
+        await result.save(); 
+    });    
+    res.send('result')
+ })
 
 
 module.exports= summaryRouter;

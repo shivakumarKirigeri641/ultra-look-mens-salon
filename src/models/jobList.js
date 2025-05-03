@@ -10,11 +10,11 @@ const jobListSchema = mongoose.Schema({
         required:true,
         ref:'ServicesList'
     }],
-    datTimeOfServices:{
+    timeOfServiceIDs:{
         type:Date,
         required:true,
         default:new Date()
-    }    
+    }
 });
 const JobList = mongoose.model('JobList', jobListSchema);
 module.exports=JobList;
