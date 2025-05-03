@@ -12,7 +12,7 @@ authRouter.post('/staff/login', async(req, res)=>{
         await validateSignIn(req, res);        
         const token = await createJwtToken(req);
         res.cookie('token', token);
-        res.status(200).json({status:'Ok', message:'Logged successfully.'});
+        res.status(200).json({status:'Ok', message:'Logged successfully.', data:req.userdata});
     }
     catch(err){
         res.status(401).json({status:'Failed', message:err.message});

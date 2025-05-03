@@ -45,25 +45,14 @@ servicesRouter.get('/feed', async(req, res)=>{
 servicesRouter.patch('/staff/updateservices', checkAuthentication, async(req, res)=>{
     try{
 
-        const arrayofserviceids = req.body.serviceIDs;
-        let serviceelements = [];
-        arrayofserviceids.forEach(element => {
-            serviceelements.push({serviceid:element})
-        });
+        const arrayofserviceids = req.body.serviceIDs;        
         const data = {
             staffId:req.userdata._id,
-            serviceData:{serviceIDs:serviceelements}
+            serviceData:arrayofserviceids
         };
-        const staffdata = await JobList.findOne({staffId:req.userdata._id})
-        if(!staffdata){        
-            const result = new JobList(data);
-            await result.save();
-        }
-        else{
-            staffdata.serviceData.push({serviceIDs:serviceelements});
-            await staffdata.save();
-        }
-        res.status(200).json({status:'Ok', message:'Jobs added/updated successfully.', data:staffdata});
+        const result = new JobList(data);
+        await result.save();
+        res.status(200).json({status:'Ok', message:'Jobs added successfully.', data:result});
     }
     catch(err){
         res.status(401).json({status:'Failed', message:err.message});

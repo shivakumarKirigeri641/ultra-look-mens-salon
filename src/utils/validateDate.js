@@ -5,8 +5,8 @@ const validateDate = (dayInt, monthInt, yearInt)=>{
   }
 
   // Validate day, month, and year ranges
-  if (monthInt < 1 || monthInt > 12) {
-    throw new Error('Invalid year!')
+  if (monthInt < 0 || monthInt > 11) {
+    throw new Error('Invalid month!')
   }
 
   if (dayInt < 1 || dayInt > 31) {
