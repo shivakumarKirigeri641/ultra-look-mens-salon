@@ -6,7 +6,7 @@ const jobListSchema = mongoose.Schema({
         ref:'Staff'
     },
     serviceData:[{
-        serviceId:{
+        serviceID:{
             type:mongoose.Schema.Types.ObjectId,
             required:true,
             ref:'ServicesList'

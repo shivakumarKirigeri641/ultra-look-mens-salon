@@ -109,41 +109,6 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
      res.status(401).json({status:'Failed', message:err.message});
  }
  });
- //get summary of jobs for year
- summaryRouter.get('/staff/summary/:year', checkAuthentication, async(req,res)=>{
-    try{
-        //validate month and year here.
-        const year = parseInt(req.params.year);
-        if(year < 2025){
-            throw new Error('App is release in 2025, cannot fetch data before 2025!')
-        }
-        const start = new Date();
-        start.setMonth(0);
-        start.setFullYear(year);
-        start.setDate(2);
-        start.setHours(0,0,0,0);
-
-
-        const end = new Date()
-        end.setMonth(11);
-        end.setDate(1);
-        end.setFullYear(year);
-        end.setHours(0,0,0,0);
-        const serviceList = await ServciesList.find({});
-        const result = await JobList.find({$and:[
-            {staffId:req.userdata._id},
-            {timeOfServiceIDs: {
-                $gte: start,
-                $lt: end
-              }
-            }]});
-            const summaryData = getpriceAndCountWithDate(result, serviceList);
-        res.status(200).json({status:'Ok', data:summaryData});
-    } 
-    catch(err){
-     res.status(401).json({status:'Failed', message:err.message});
- }
- });
 
  //temp
  summaryRouter.post('/staff/updatedate', async(req,res)=>{
