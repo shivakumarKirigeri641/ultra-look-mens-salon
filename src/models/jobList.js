@@ -6,14 +6,26 @@ const jobListSchema = mongoose.Schema({
         ref:'Staff'
     },
     serviceData:[{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:'ServicesList'
+        serviceId:{
+            type:mongoose.Schema.Types.ObjectId,
+            required:true,
+            ref:'ServicesList'
+        },
+        count:{
+            type:Number,
+            required:true,
+            default:0
+        },        
     }],
     timeOfServiceIDs:{
         type:Date,
         required:true,
         default:new Date()
+    },
+    isOnlinePaid:{
+        type:Boolean,
+        required:true,
+        default:true
     }
 });
 const JobList = mongoose.model('JobList', jobListSchema);
