@@ -11,7 +11,8 @@ const comboListSchema = mongoose.Schema({
         {
             serviceID:{
                 type:mongoose.Schema.Types.ObjectId,
-                required:true,                
+                required:true,
+                ref:'ServicesList'
             }
         }
     ],

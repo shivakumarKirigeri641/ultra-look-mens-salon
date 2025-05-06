@@ -10,7 +10,7 @@ const servicesRouter = express.Router();
 servicesRouter.get('/staff/feed', checkAuthentication, async(req, res)=>{
     try{
         let servcieslist = await ServicesList.find({});
-        let comboserviceslist = await ComboLists.find({}).populate('serviceID', 'serviceName');
+        let comboserviceslist = await ComboLists.find({}).populate('combos.serviceID', 'serviceName');
         servcieslist = servcieslist.map(x=>({
             _id:x._id,
             serviceName:x.serviceName,
@@ -24,7 +24,7 @@ servicesRouter.get('/staff/feed', checkAuthentication, async(req, res)=>{
                 {firstName:req.userdata.firstName, lastName:req.userdata.lastName},
                 servcieslist,
                 comboserviceslist
-                }})
+                }});
     }
     catch(err){
         res.status(401).json({status:'Failed', message:err.message});
