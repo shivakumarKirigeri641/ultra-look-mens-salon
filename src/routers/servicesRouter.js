@@ -1,4 +1,5 @@
 const express = require('express');
+const getTotalFromListOfServices = require('../utils/getTotalFromListOfServices');
 const getPayment = require('../utils/getPayment');
 const checkAuthentication = require('../middleware/checkAuthentication');
 const getactualPriceFromDateTotoDate = require('../utils/getactualPriceFromDateTotoDate');
@@ -8,6 +9,7 @@ const ServicesList = require('../models/servicesList');
 const ComboLists = require('../models/comboLists');
 const isDateWithinRange = require("../utils/isDateWithinRange");
 const getRandomInt=require('../utils/getRandomNumber');
+const { default: mongoose } = require('mongoose');
 const servicesRouter = express.Router();
 
 
@@ -136,5 +138,39 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
         catch(err){
             res.status(401).json({status:'Failed', message:err.message});
         }
+    /*try{
+        const comboLists = await ComboLists.find({});
+
+        comboLists.map(x=>{
+            prices:[]
+        });
+        const servicelist = await ServicesList.find({});
+        let comboName='Gold combo';
+        let myprices=[];
+        let discount=getRandomInt(25, 50);
+        let combos=[
+            {serviceID:'6818ca3cd8b1129065adae17'},
+            {serviceID:'6818cab6d07fd7adb65bfb1e'},
+            {serviceID:'6818cb706e9074116f659140'},
+            {serviceID:'6818cc062db31146aaca0e96'},
+            {serviceID:'6818cc2f9729c1d0cfac7aea'},
+            {serviceID:'6818cc6a53ab3c40f145dbc1'},
+            {serviceID:'6818cce62ac48ff582c66103'},
+            {serviceID:'6818cd15f9ba57f41b32cdc4'},
+        ]        
+        for(let i=0;i<=5;i++){
+            let fromDate = new Date(2025, i, 2);
+            let currdate = new Date(2025, i,15);
+            let toDate = new Date(2025, fromDate.getMonth()+1, 1);
+            const actualpriceOfCombo = getTotalFromListOfServices(combos, currdate, servicelist)
+            myprices.push({fromDate:fromDate, toDate:toDate, price:actualpriceOfCombo});                
+        }        
+        const result = new ComboLists({comboName:comboName, combos:combos, prices:myprices, discount:discount});
+        await result.save();
+        res.send('testing')
+    }
+    catch(err){
+        res.send(err.message);
+    }*/
 });
 module.exports=servicesRouter;

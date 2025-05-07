@@ -16,6 +16,24 @@ const comboListSchema = mongoose.Schema({
             }
         }
     ],
+    prices:[
+        {
+            fromDate:{
+                type:Date,
+                required:true
+            },
+            toDate:{
+                type:Date,
+                required:true
+            },
+            price:{
+                type:Number,
+                required:true,
+                min:50,
+                max:5000
+            }
+        }
+    ],
     discount:{
         type:Number,
         required:true,
