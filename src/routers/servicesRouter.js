@@ -71,6 +71,8 @@ servicesRouter.patch('/staff/updateservices', checkAuthentication, async(req, re
         res.status(401).json({status:'Failed', message:err.message});
     }
 });
+
+//dummy data insertaion, (internal only)
 servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)=>{
     try{
 

@@ -60,6 +60,7 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
             $lt: end
           }
         }]});
+        
         res.status(200).json({status:'Ok', data:result});
      } 
      catch(err){
