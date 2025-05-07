@@ -10,16 +10,12 @@ const { default: mongoose } = require('mongoose');
 summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
     try{
         //validate month and year here.
-        const serviceList = await ServciesList.find({});
         const start = new Date();
-        start.setDate(5);
-        start.setMonth(4);
-        start.setHours(0,0,0,0);
         const end=new Date();
         end.setDate(start.getDate());
         end.setMonth(start.getMonth());
         end.setHours(23,59,59,0);
-        
+        console.log(start);
         const result = await JobList.find({
             $and:[
             {staffId:req.userdata._id},
@@ -28,8 +24,8 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
                 $lt: end
               }
             }]});
-            const summaryData = getpriceAndCountWithDate(result, serviceList);
-            res.status(200).json({status:'Ok', data:summaryData});
+            //const summaryData = getpriceAndCountWithDate(result, serviceList);
+            res.status(200).json({status:'Ok', data:result});
        } 
        catch(err){
         res.status(401).json({status:'Failed', message:err.message});
@@ -63,8 +59,7 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
             $lt: end
           }
         }]});
-        const summaryData = getpriceAndCountWithDate(result, serviceList);
-        res.status(200).json({status:'Ok', data:summaryData});
+        res.status(200).json({status:'Ok', data:result});
      } 
      catch(err){
       res.status(401).json({status:'Failed', message:err.message});
@@ -102,8 +97,7 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
                 $lt: end
               }
             }]});
-            const summaryData = getpriceAndCountWithDate(result, serviceList);
-        res.status(200).json({status:'Ok', data:summaryData});
+        res.status(200).json({status:'Ok', data:result});
     } 
     catch(err){
      res.status(401).json({status:'Failed', message:err.message});

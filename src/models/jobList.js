@@ -14,6 +14,7 @@ const jobListSchema = mongoose.Schema({
         jobID:{
             type:mongoose.Schema.Types.ObjectId,
             required:true,
+            ref:'ServicesList'
         },
         isCombo:{
             type:Boolean,

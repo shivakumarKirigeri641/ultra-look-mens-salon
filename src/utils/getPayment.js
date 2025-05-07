@@ -5,8 +5,7 @@ const getPayment=(servicedata, timeOfServiceIDs, servicelist, combolist)=>{
     for(let i=0;i<servicedata.length;i++){
         let isidfound=false;        
         const jobid = servicedata[i].jobID;
-        const count =servicedata[i].count; 
-        console.log(jobid);
+        const count =servicedata[i].count;
 
         //get price form servicelist if jobid exists
         for(let j=0;j<servicelist.length;j++){
@@ -26,7 +25,6 @@ const getPayment=(servicedata, timeOfServiceIDs, servicelist, combolist)=>{
 
         //now check in comboid if not available in servicelist
         if(false === isidfound){
-            console.log('false');
             let subtotal=0;
             let discount=0;
             for(let l=0;l<combolist.length;l++){
@@ -51,6 +49,7 @@ const getPayment=(servicedata, timeOfServiceIDs, servicelist, combolist)=>{
                     break;
                 }
             }
+            totalprice = subtotal;
             totalprice = totalprice - (totalprice*discount/100);
         }
     }
