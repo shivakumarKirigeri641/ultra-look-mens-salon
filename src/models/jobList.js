@@ -25,7 +25,20 @@ const jobListSchema = mongoose.Schema({
             type:Number,
             required:true,
             default:1
-        }        
+        },
+        pricePerService:{
+            type:Number,
+            required:true,
+            default:0
+        },
+        fromDate:{
+            type:Date,
+            required:true
+        },
+        toDate:{
+            type:Date,
+            required:true
+        },
     }],    
     payments:[
         {

@@ -1,6 +1,7 @@
 const express = require('express');
 const getPayment = require('../utils/getPayment');
 const checkAuthentication = require('../middleware/checkAuthentication');
+const getactualPriceFromDateTotoDate = require('../utils/getactualPriceFromDateTotoDate');
 const JobList = require("../models/jobList");
 const ServicesList = require('../models/servicesList');
 const ComboLists = require('../models/comboLists');
@@ -106,10 +107,11 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
                         jobId = combolist[getRandomInt(0, combolist?.length-1)]._id;
                         count = getRandomInt(1, 8);
                         isCombo=true;
-                    }                
-                    servicedata.push({jobID:jobId, isCombo:isCombo, count:count})
+                    }
+                    const {actualprice, fromDate, toDate} = getactualPriceFromDateTotoDate(jobId, startDate, servicelist, combolist);
+                    servicedata.push({jobID:jobId, isCombo:isCombo, count:count, pricePerService:actualprice, fromDate:fromDate, toDate:toDate})
                 }
-                let totalamt = getPayment(servicedata, startDate, servicelist, combolist);
+                let totalamt = getPayment(servicedata);
                 if(0 === getRandomInt(0,1)){
                 payments.push({mode:'ONLINE', amount:totalamt}, {mode:'CASH', amount:0})
                 }
@@ -118,6 +120,7 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
                 }
                 startDate.setHours(time+7, getRandomInt(0,30,0,));
                 const jsonobj ={staffId:staff, timeOfServiceIDs:startDate, serviceData:servicedata, payments:payments};
+                console.log(jsonobj);
                 const result = new JobList(jsonobj);
                 await result.save();            
             }
