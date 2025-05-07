@@ -25,6 +25,12 @@ servicesRouter.get('/staff/feed', checkAuthentication, async(req, res)=>{
             updatedAt:x.updatedAt,
             price:x.prices[x.prices.length-1].price
         }));
+        comboserviceslist = comboserviceslist.map(x=>({
+            _id:x._id,
+            comboName:x.comboName,
+            discount:x.discount,
+            price:x.prices[x.prices.length-1].price
+        }));
         res.status(200).json({status:'Ok', message:'Data fetched successfully', 
             data:{
                 loggedInUser:
