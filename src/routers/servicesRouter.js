@@ -3,6 +3,7 @@ const getPayment = require('../utils/getPayment');
 const checkAuthentication = require('../middleware/checkAuthentication');
 const getactualPriceFromDateTotoDate = require('../utils/getactualPriceFromDateTotoDate');
 const JobList = require("../models/jobList");
+const getJobName = require('../utils/getJobName');
 const ServicesList = require('../models/servicesList');
 const ComboLists = require('../models/comboLists');
 const isDateWithinRange = require("../utils/isDateWithinRange");
@@ -96,6 +97,7 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
                     let count=0;
                     let isCombo=false;
                     let iscombofetch= getRandomInt(0,1);                
+                    let name='';
                     if(0===iscombofetch){
                         //std
                         jobId = servicelist[getRandomInt(0, servicelist?.length-1)]._id;
@@ -105,11 +107,12 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
                     else{
                         //combo
                         jobId = combolist[getRandomInt(0, combolist?.length-1)]._id;
-                        count = getRandomInt(1, 8);
+                        count = getRandomInt(1, 8);                        
                         isCombo=true;
                     }
+                    name = getJobName(jobId, servicelist, combolist);
                     const {actualprice, fromDate, toDate} = getactualPriceFromDateTotoDate(jobId, startDate, servicelist, combolist);
-                    servicedata.push({jobID:jobId, isCombo:isCombo, count:count, pricePerService:actualprice, fromDate:fromDate, toDate:toDate})
+                    servicedata.push({jobID:jobId, isCombo:isCombo, jobName:name, count:count, pricePerService:actualprice, fromDate:fromDate, toDate:toDate})
                 }
                 let totalamt = getPayment(servicedata);
                 if(0 === getRandomInt(0,1)){
@@ -120,7 +123,6 @@ servicesRouter.post('/staff/updatejoblist', checkAuthentication, async(req, res)
                 }
                 startDate.setHours(time+7, getRandomInt(0,30,0,));
                 const jsonobj ={staffId:staff, timeOfServiceIDs:startDate, serviceData:servicedata, payments:payments};
-                console.log(jsonobj);
                 const result = new JobList(jsonobj);
                 await result.save();            
             }

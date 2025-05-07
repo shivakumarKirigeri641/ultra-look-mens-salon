@@ -16,6 +16,11 @@ const jobListSchema = mongoose.Schema({
             required:true,
             ref:'ServicesList'
         },
+        jobName:{
+            type:String,
+            required:true,
+            default:''
+        },
         isCombo:{
             type:Boolean,
             required:true,

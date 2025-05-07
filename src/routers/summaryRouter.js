@@ -52,6 +52,7 @@ summaryRouter.get('/staff/summary/today', checkAuthentication, async(req,res)=>{
       end.setHours(23,59,59,0);
       
       const serviceList = await ServciesList.find({});
+      const comboList = await ServciesList.find({});
       const result = await JobList.find({$and:[
         {staffId:req.userdata._id},
         {timeOfServiceIDs: {
